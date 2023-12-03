@@ -1,5 +1,5 @@
 # Democoin
 
-This is a demonstration of a token that distributes an equal amount to each participant with the amount determined by the median of each participant's ballot value.
+Demonstration of democracy without discrete elections in an ERC20 token's supply. Each participant receives an equal amount determined by the median of each participant's ballot value.
 
 
