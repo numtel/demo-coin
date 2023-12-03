@@ -4,3 +4,6 @@
 [submodule "lib/solidity-median-library"]
 	path = lib/solidity-median-library
 	url = https://github.com/numtel/solidity-median-library
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
