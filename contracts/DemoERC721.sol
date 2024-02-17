@@ -13,14 +13,9 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
   error INSUFFICIENT_VALUE_SENT();
   error INSUFFICIENT_BALANCE();
 
+  event MintBallotSet(uint256 indexed tokenId, uint256 oldValue, uint256 newValue);
+
   MedianLibrary.Data mintBallots;
-
-  struct Ballot {
-    uint256 timestamp;
-    uint256 value;
-  }
-
-  mapping(uint256 => Ballot[]) public tokenMintBallots;
 
   uint256 public mintCount;
   mapping(uint256 => uint256) public mintPrices;
@@ -40,11 +35,15 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
     _mint(msg.sender, mintCount);
   }
 
+  function currentMintPrice() external view returns(uint256) {
+    return mintBallots.median();
+  }
+
   function setMintBallot(uint256 tokenId, uint256 value) external {
     if(ownerOf(tokenId) != msg.sender)
       revert ONLY_TOKEN_OWNER();
+    emit MintBallotSet(tokenId, mintBallots.values[tokenId], value);
     mintBallots.set(tokenId, value);
-    tokenMintBallots[tokenId].push(Ballot(block.timestamp, value));
   }
 
   function claimableBalance(uint256 tokenId, uint256 untilTokenId) public view returns (uint256 balance) {

@@ -8,6 +8,7 @@ contract DemoERC721Test is Test {
   error ONLY_TOKEN_OWNER();
   error INSUFFICIENT_VALUE_SENT();
   error INSUFFICIENT_BALANCE();
+  event MintBallotSet(uint256 indexed tokenId, uint256 oldValue, uint256 newValue);
 
   DemoERC721 public collection;
 
@@ -25,6 +26,8 @@ contract DemoERC721Test is Test {
     vm.expectRevert(ONLY_TOKEN_OWNER.selector);
     collection.setMintBallot(1, 1 ether);
 
+    vm.expectEmit();
+    emit MintBallotSet(1, 0, 1 ether);
     collection.setMintBallot(1, 1 ether);
 
     // Enough for many tests
@@ -67,6 +70,15 @@ contract DemoERC721Test is Test {
     uint256 balanceBefore = address(this).balance;
     collection.claimBalance(1, type(uint256).max, 2 ether, payable(address(this)));
     assertEq(address(this).balance - balanceBefore, 2 ether);
+  }
+
+  function testGas() internal {
+    for(uint256 i = 0; i<1000; i++) {
+      uint256 mintPrice = collection.currentMintPrice();
+      vm.deal(address(this), mintPrice);
+      collection.mint{value:mintPrice}();
+      collection.setMintBallot(i+1, i+1);
+    }
   }
 }
 
