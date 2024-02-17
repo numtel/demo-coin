@@ -11,6 +11,7 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
 
   error ONLY_TOKEN_OWNER();
   error INSUFFICIENT_VALUE_SENT();
+  error INSUFFICIENT_BALANCE();
 
   MedianLibrary.Data mintBallots;
 
@@ -22,6 +23,8 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
   mapping(uint256 => Ballot[]) public tokenMintBallots;
 
   uint256 public mintCount;
+  mapping(uint256 => uint256) public mintPrices;
+  mapping(uint256 => uint256) public balanceClaimed;
 
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
 
@@ -33,6 +36,7 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
     if(msg.value < mintBallots.median())
       revert INSUFFICIENT_VALUE_SENT();
     mintCount++;
+    mintPrices[mintCount] = msg.value;
     _mint(msg.sender, mintCount);
   }
 
@@ -41,6 +45,27 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
       revert ONLY_TOKEN_OWNER();
     mintBallots.set(tokenId, value);
     tokenMintBallots[tokenId].push(Ballot(block.timestamp, value));
+  }
+
+  function claimableBalance(uint256 tokenId, uint256 untilTokenId) public view returns (uint256 balance) {
+    // Allow chunked claims to avoid block gas limit
+    if(untilTokenId > mintCount) {
+      untilTokenId = mintCount;
+    }
+
+    for(uint256 i = tokenId; i < untilTokenId; i++) {
+      balance += mintPrices[i + 1] / i;
+    }
+
+    balance -= balanceClaimed[tokenId];
+  }
+
+  function claimBalance(uint256 tokenId, uint256 untilTokenId, uint256 amount, address payable recipient) external {
+    if(claimableBalance(tokenId, untilTokenId) < amount)
+      revert INSUFFICIENT_BALANCE();
+
+    balanceClaimed[tokenId] += amount;
+    recipient.transfer(amount);
   }
 
 }
