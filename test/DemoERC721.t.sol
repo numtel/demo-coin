@@ -24,11 +24,12 @@ contract DemoERC721Test is Test {
 
     vm.prank(address(1));
     vm.expectRevert(ONLY_TOKEN_OWNER.selector);
-    collection.setMintBallot(1, 1 ether);
+    collection.setMintBallot(1, 10);
 
     vm.expectEmit();
-    emit MintBallotSet(1, 0, 1 ether);
-    collection.setMintBallot(1, 1 ether);
+    emit MintBallotSet(1, 0, 10);
+    collection.setMintBallot(1, 10);
+    assertEq(collection.currentMintPrice(), 1 ether);
 
     // Enough for many tests
     vm.deal(address(this), 10 ether);
@@ -52,7 +53,7 @@ contract DemoERC721Test is Test {
     assertEq(collection.claimableBalance(4, type(uint256).max), 0 ether);
 
     // Median is now 2 eth
-    collection.setMintBallot(2, 3 ether);
+    collection.setMintBallot(2, 30);
 
     vm.expectRevert(INSUFFICIENT_VALUE_SENT.selector);
     collection.mint{value: 1 ether}();
@@ -72,7 +73,7 @@ contract DemoERC721Test is Test {
     assertEq(address(this).balance - balanceBefore, 2 ether);
   }
 
-  function testGas() internal {
+  function testGas() public {
     for(uint256 i = 0; i<1000; i++) {
       uint256 mintPrice = collection.currentMintPrice();
       vm.deal(address(this), mintPrice);
