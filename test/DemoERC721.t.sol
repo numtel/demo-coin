@@ -5,10 +5,12 @@ import {Test, console2} from "forge-std/Test.sol";
 import {DemoERC721} from "../contracts/DemoERC721.sol";
 
 contract DemoERC721Test is Test {
-  error ONLY_TOKEN_OWNER();
-  error INSUFFICIENT_VALUE_SENT();
   error INSUFFICIENT_BALANCE();
-  event MintBallotSet(uint256 indexed tokenId, uint256 oldValue, uint256 newValue);
+  error INSUFFICIENT_VALUE_SENT();
+  error INVALID_VALUE();
+  error ONLY_TOKEN_OWNER();
+
+  event MintBallotUpdate(uint256 indexed tokenId, uint256 oldValue, uint256 newValue);
 
   DemoERC721 public collection;
 
@@ -20,14 +22,17 @@ contract DemoERC721Test is Test {
 
   function test_Increment() public {
     // First nft is free
-    collection.mint();
+    collection.mint(0, 0, "");
 
     vm.prank(address(1));
     vm.expectRevert(ONLY_TOKEN_OWNER.selector);
     collection.setMintBallot(1, 10);
 
+    vm.expectRevert(INVALID_VALUE.selector);
+    collection.setMintBallot(1, 100000);
+
     vm.expectEmit();
-    emit MintBallotSet(1, 0, 10);
+    emit MintBallotUpdate(1, 0, 10);
     collection.setMintBallot(1, 10);
     assertEq(collection.currentMintPrice(), 1 ether);
 
@@ -35,18 +40,18 @@ contract DemoERC721Test is Test {
     vm.deal(address(this), 10 ether);
 
     vm.expectRevert(INSUFFICIENT_VALUE_SENT.selector);
-    collection.mint{value: 0.5 ether}();
+    collection.mint{value: 0.5 ether}(0, 0, "");
 
     assertEq(collection.claimableBalance(1, type(uint256).max), 0);
-    collection.mint{value: 1 ether}();
+    collection.mint{value: 1 ether}(0, 0, "");
     assertEq(collection.claimableBalance(1, type(uint256).max), 1 ether);
 
-    collection.mint{value: 1 ether}();
+    collection.mint{value: 1 ether}(0, 0, "");
     assertEq(collection.claimableBalance(1, type(uint256).max), 1.5 ether);
     assertEq(collection.claimableBalance(2, type(uint256).max), 0.5 ether);
     assertEq(collection.claimableBalance(3, type(uint256).max), 0 ether);
 
-    collection.mint{value: 1 ether}();
+    collection.mint{value: 1 ether}(0, 0, "");
     assertEq(collection.claimableBalance(1, type(uint256).max), 1.833333333333333333 ether);
     assertEq(collection.claimableBalance(2, type(uint256).max), 0.833333333333333333 ether);
     assertEq(collection.claimableBalance(3, type(uint256).max), 0.333333333333333333 ether);
@@ -56,9 +61,9 @@ contract DemoERC721Test is Test {
     collection.setMintBallot(2, 30);
 
     vm.expectRevert(INSUFFICIENT_VALUE_SENT.selector);
-    collection.mint{value: 1 ether}();
+    collection.mint{value: 1 ether}(0, 0, "");
 
-    collection.mint{value: 2 ether}();
+    collection.mint{value: 2 ether}(0, 0, "");
     assertEq(collection.claimableBalance(1, type(uint256).max), 2.333333333333333333 ether);
     assertEq(collection.claimableBalance(2, type(uint256).max), 1.333333333333333333 ether);
     assertEq(collection.claimableBalance(3, type(uint256).max), 0.833333333333333333 ether);
@@ -77,7 +82,7 @@ contract DemoERC721Test is Test {
     for(uint256 i = 0; i<1000; i++) {
       uint256 mintPrice = collection.currentMintPrice();
       vm.deal(address(this), mintPrice);
-      collection.mint{value:mintPrice}();
+      collection.mint{value:mintPrice}(0, 0, "");
       collection.setMintBallot(i+1, i+1);
     }
   }

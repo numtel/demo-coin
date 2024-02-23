@@ -10,9 +10,9 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
   error INSUFFICIENT_VALUE_SENT();
   error INVALID_VALUE();
   error ONLY_TOKEN_OWNER();
-  error NO_CHANGE();
 
-  event MintBallotSet(uint256 indexed tokenId, uint256 oldValue, uint256 newValue);
+  event MintBallotUpdate(uint256 indexed tokenId, uint256 oldValue, uint256 newValue);
+  event FlagUpdate(uint256 indexed tokenId);
 
   mapping(uint256 => uint256) public mintBallots;
   mapping(uint256 => uint256) public medianBuckets;
@@ -24,6 +24,9 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
   mapping(uint256 => uint256) public mintPrices;
   mapping(uint256 => uint256) public balanceClaimed;
 
+  mapping(uint256 => string) _tokenURIs;
+  mapping(uint256 => uint256) public flags;
+
   constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
 
   function supportsInterface(
@@ -32,13 +35,16 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
     return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
   }
 
-  function mint() external payable {
+  function mint(uint256 _mintBallot, uint256 flag, string memory _tokenURI) external payable {
     if(msg.value < currentMintPrice())
       revert INSUFFICIENT_VALUE_SENT();
     mintCount++;
     // You can pay more than the price
     mintPrices[mintCount] = msg.value;
     _mint(msg.sender, mintCount);
+    setMintBallot(mintCount, _mintBallot);
+    setFlag(mintCount, flag);
+    setTokenURI(mintCount, _tokenURI);
   }
 
   function currentMintPrice() public view returns(uint256) {
@@ -69,10 +75,8 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
       revert ONLY_TOKEN_OWNER();
     if(value > bucketCount)
       revert INVALID_VALUE();
-    if(mintBallots[tokenId] == value)
-      revert NO_CHANGE();
 
-    emit MintBallotSet(tokenId, mintBallots[tokenId], value);
+    emit MintBallotUpdate(tokenId, mintBallots[tokenId], value);
 
     if(mintBallots[tokenId] > 0) {
       // Updating an existing value
@@ -118,4 +122,23 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
     recipient.transfer(amount);
   }
 
+  function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    return _tokenURIs[tokenId];
+  }
+
+  function setTokenURI(uint256 tokenId, string memory _tokenURI) public {
+    if(ownerOf(tokenId) != msg.sender)
+      revert ONLY_TOKEN_OWNER();
+    _tokenURIs[tokenId] = _tokenURI;
+    emit MetadataUpdate(tokenId);
+  }
+
+  function setFlag(uint256 tokenId, uint256 flag) public {
+    if(ownerOf(tokenId) != msg.sender)
+      revert ONLY_TOKEN_OWNER();
+
+    flags[tokenId] = flag;
+
+    emit FlagUpdate(tokenId);
+  }
 }
