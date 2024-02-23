@@ -5,15 +5,11 @@ import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultConfig,
   RainbowKitProvider,
+  darkTheme,
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  base,
-  zora,
+  sepolia,
 } from 'wagmi/chains';
 import {
   QueryClientProvider,
@@ -24,9 +20,9 @@ import App from './App.jsx';
 import './index.css';
 
 const config = getDefaultConfig({
-  appName: 'My RainbowKit App',
-  projectId: 'YOUR_PROJECT_ID',
-  chains: [mainnet, polygon, optimism, arbitrum, base, zora],
+  appName: 'Optimeme Factory',
+  projectId: 'ba13d5bdabc28403d3af4b511efa2bf3',
+  chains: [sepolia],
   ssr: false, // If your dApp uses server side rendering (SSR)
 });
 
@@ -36,7 +32,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
+        <RainbowKitProvider theme={darkTheme()}>
           <App />
         </RainbowKitProvider>
       </QueryClientProvider>

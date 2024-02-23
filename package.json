@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "deploy:sepolia": "forge script script/DemoERC721.s.sol:Deploy --rpc-url https://rpc.ankr.com/eth_sepolia --broadcast --verify -vvvv",
     "preview": "vite preview"
   },
   "dependencies": {
