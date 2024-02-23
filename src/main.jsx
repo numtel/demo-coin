@@ -10,6 +10,7 @@ import {
 import { WagmiProvider } from 'wagmi';
 import {
   sepolia,
+  holesky,
 } from 'wagmi/chains';
 import {
   QueryClientProvider,
@@ -23,7 +24,7 @@ import './index.css';
 const config = getDefaultConfig({
   appName: 'Optimeme Factory',
   projectId: 'ba13d5bdabc28403d3af4b511efa2bf3',
-  chains: [sepolia],
+  chains: [holesky],
   ssr: false, // If your dApp uses server side rendering (SSR)
 });
 
@@ -33,7 +34,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <DarkModeDetector>
+        <DarkModeDetector dark={{ theme: darkTheme() }}>
           <RainbowKitProvider>
             <App />
           </RainbowKitProvider>

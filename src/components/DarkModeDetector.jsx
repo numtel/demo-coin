@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import {darkTheme} from '@rainbow-me/rainbowkit';
 
 // From ChatGPT4
-const DarkModeDetector = ({ children }) => {
+const DarkModeDetector = ({ children, dark, light }) => {
   const [theme, setTheme] = useState(
-    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? darkTheme() : undefined
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? dark : light
   );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = (e) => {
-      setTheme(e.matches ? darkTheme() : undefined);
+      setTheme(e.matches ? dark : light);
     };
 
     mediaQuery.addListener(handleChange); // Add the event listener
@@ -18,7 +17,7 @@ const DarkModeDetector = ({ children }) => {
   }, []);
 
   return React.Children.map(children, child =>
-    React.isValidElement(child) ? React.cloneElement(child, { theme }) : child
+    React.isValidElement(child) ? React.cloneElement(child, theme) : child
   );
 };
 

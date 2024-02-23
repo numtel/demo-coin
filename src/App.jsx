@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
+import DarkModeDetector from './components/DarkModeDetector.jsx';
+
 export default function App() {
   return (
-    <>
-      <p className="read-the-docs">
+    <main>
+      <h1>Optimeme<br />Factory</h1>
+      <p className="rainbowkit">
         <ConnectButton />
       </p>
       <blockquote>Show me what democracy looks like!<br />
@@ -16,7 +19,7 @@ export default function App() {
 
       <p>As an initial demonstration of this new type of decision-making protocol, this project has a single criteria under continous election: the price to mint another NFT.</p>
 
-    </>
+    </main>
   );
 }
 
