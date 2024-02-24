@@ -141,4 +141,14 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
 
     emit FlagUpdate(tokenId);
   }
+
+  function setAll(uint256 tokenId, uint256 _mintBallot, uint256 flag, string memory _tokenURI) external {
+    if(ownerOf(tokenId) != msg.sender)
+      revert ONLY_TOKEN_OWNER();
+
+    setMintBallot(tokenId, _mintBallot);
+    setFlag(tokenId, flag);
+    setTokenURI(tokenId, _tokenURI);
+  }
+
 }
