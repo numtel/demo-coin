@@ -93,6 +93,12 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
     }
   }
 
+  function setMintBallotMany(uint256[] memory tokenId, uint256 value) external {
+    for(uint256 i = 0; i < tokenId.length; i++) {
+      setMintBallot(tokenId[i], value);
+    }
+  }
+
   function claimableBalance(
     uint256 tokenId,
     uint256 untilTokenId

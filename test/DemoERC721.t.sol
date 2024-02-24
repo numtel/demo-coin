@@ -92,6 +92,13 @@ contract DemoERC721Test is Test {
 
     collection.claimBalanceMany(tokenIds, type(uint256).max, payable(address(this)));
     assertEq(address(this).balance - balanceBefore, 4.666666666666666666 ether);
+
+    vm.prank(address(1));
+    vm.expectRevert(ONLY_TOKEN_OWNER.selector);
+    collection.setMintBallotMany(tokenIds, 50);
+
+    collection.setMintBallotMany(tokenIds, 50);
+    assertEq(collection.currentMintPrice(), 5 ether);
   }
 
   function testGas() public {
