@@ -12,7 +12,9 @@ import { chainContracts } from '../contracts.js';
 import Flag from './Flag.jsx';
 import TokenForm from './TokenForm.jsx';
 import ClaimBalance from './ClaimBalance.jsx';
+import CollectAll from './CollectAll.jsx';
 import Dialog from './Dialog.jsx';
+import SlideIn from './SlideIn.jsx';
 
 export default function MyTokens() {
   const {address: account, chainId} = useAccount();
@@ -110,15 +112,22 @@ function FetchTokens({ list }) {
     Error loading token details!
   </div>);
 
-  return list.map((tokenId, index) => (<DisplayToken
-    key={Number(tokenId)}
-    tokenId={tokenId}
-    flag={data[index * 5].result}
-    tokenURI={data[index * 5 + 1].result}
-    mintBallot={data[index * 5 + 2].result}
-    mintPrice={data[index * 5 + 3].result}
-    claimableBalance={data[index * 5 + 4].result}
-    />));
+  let totalBalance = 0n;
+  for(let i = 0; i < list.length; i++) {
+    totalBalance += data[i* 5 + 4].result;
+  }
+  return (<>
+    <CollectAll tokenIds={list} {...{totalBalance}}/>
+    <SlideIn>{list.map((tokenId, index) => (<DisplayToken
+      {...{contracts, tokenId}}
+      key={Number(tokenId)}
+      flag={data[index * 5].result}
+      tokenURI={data[index * 5 + 1].result}
+      mintBallot={data[index * 5 + 2].result}
+      mintPrice={data[index * 5 + 3].result}
+      claimableBalance={data[index * 5 + 4].result}
+      />))}</SlideIn>
+  </>);
 }
 
 function DisplayToken({
@@ -128,13 +137,14 @@ function DisplayToken({
   mintBallot,
   mintPrice,
   claimableBalance,
+  contracts,
 }) {
   const [show, setShow] = useState(0);
   return (<div className="token">
     <h3>Token #{String(tokenId)}</h3>
     <Flag value={flag} href={tokenURI} />
-    <p>Minted for {formatEther(mintPrice)} ETH</p>
-    <p>Claimable balance: {parseFloat(formatEther(claimableBalance)).toFixed(4)} ETH</p>
+    <p>Minted for {formatEther(mintPrice)} {contracts.nativeCurrency}</p>
+    <p>Claimable balance: {parseFloat(formatEther(claimableBalance)).toFixed(4)} {contracts.nativeCurrency}</p>
     <ClaimBalance tokenId={tokenId} balance={claimableBalance} />
     <button onClick={() => setShow(show + 1)}>Update...</button>
 

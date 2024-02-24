@@ -115,6 +115,10 @@ h2 {
   text-align:center;
   transform-origin: left;
 }
+.move-up {
+  position:relative;
+  top: -20px;
+}
 
 
 button {
@@ -313,3 +317,18 @@ footer {
 /* FA icons flash huge on page load? */
 .svg-inline--fa { max-height: 1rem; }
 footer .svg-inline--fa { max-height: 2rem; }
+
+
+.slider {
+  width: 100%;
+  position: relative;
+  left: -100%;
+  opacity: 0;
+  transition: left 0.3s ease, opacity 0.5s ease;
+}
+
+.slider.active {
+  left: 0;
+  opacity: 1;
+}
+
