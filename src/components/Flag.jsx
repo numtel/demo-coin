@@ -1,5 +1,5 @@
 
-export default function Flag({ value }) {
+export default function Flag({ value, href }) {
   const shape = Number(value & 0xFFn);
   const color1 = ((value >> 8n) & 0xFFFFFFn).toString(16).padStart(6, '0');
   const color2 = ((value >> 32n) & 0xFFFFFFn).toString(16).padStart(6, '0');
@@ -35,6 +35,12 @@ export default function Flag({ value }) {
     background = `black`;
   }
 
+  if(href) return (<a href={href} rel="noopener" target="_blank"><div
+    className="flag"
+    style={{
+      background
+    }}
+  /></a>);
   return (<div
     className="flag"
     style={{

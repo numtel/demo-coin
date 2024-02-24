@@ -9,6 +9,7 @@ import { formatEther } from 'viem';
 import { chainContracts } from '../contracts.js';
 
 import TokenForm from './TokenForm.jsx';
+import Dialog from './Dialog.jsx';
 
 export default function Mint() {
   const {address: account, chainId} = useAccount();
@@ -22,6 +23,7 @@ export default function Mint() {
       },
     ],
   });
+  const [show, setShow] = useState(false);
 
   if(isLoading) return (<div className="loading">
     Loading...
@@ -31,13 +33,22 @@ export default function Mint() {
     Error loading!
   </div>);
 
-  const insufficientBalance = data[0].result > balance.value;
+  const insufficientBalance = balance && data[0].result > balance.value;
   return (<>
-    <p className="price">
-      Current Price:
+    <h2>
+      Current Price:&nbsp;
       <span className="value">{formatEther(data[0].result)} {contracts.nativeCurrency}</span>
+    </h2>
+    <p className="price">
       {insufficientBalance && <span className="help">Insufficient Balance!</span>}
     </p>
-    <TokenForm mintPrice={data[0].result} />
+    <button onClick={() => setShow(true)}>Configure and Mint Token...</button>
+    <Dialog {...{show, setShow}} button="Close">
+      <h2>Mint New Token for {formatEther(data[0].result)} {contracts.nativeCurrency}</h2>
+      <p className="help">
+        Tokens can be configured by the owner at any time.
+      </p>
+      <TokenForm mintPrice={data[0].result} />
+    </Dialog>
   </>);
 }

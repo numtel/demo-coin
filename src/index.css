@@ -1,5 +1,6 @@
 @font-face { font-family: Modak; font-weight: 400; src: url(fonts/Modak-Regular.ttf); }
 @font-face { font-family: ComicMono; font-weight: 400; src: url(fonts/ComicMono.ttf); }
+@font-face { font-family: SpecialElite; font-weight: 400; src: url(fonts/SpecialElite-Regular.ttf); }
 
 
 * {
@@ -99,6 +100,18 @@ a {
   text-decoration: none;
 }
 
+blockquote {
+  font-family: SpecialElite;
+  font-size: 2rem;
+  transform: rotate(1deg);
+}
+h2 {
+  font-family: SpecialElite;
+  font-size: 2rem;
+  transform: rotate(-3deg);
+  margin-bottom:30px;
+}
+
 button {
   cursor: pointer;
   color: var(--my-color));
@@ -130,6 +143,7 @@ button.outline {
 main {
   max-width: 960px;
   margin: 0 auto;
+  padding: 0 10px 60px 10px;
 }
 
 main>blockquote,
@@ -146,4 +160,101 @@ main>p>a {
   width: 100px;
   height: 60px;
   border-radius:5px;
+}
+
+form {
+}
+form .fields {
+  display:flex;
+  gap: 10px;
+  padding: 10px 0;
+}
+fieldset {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  width: 33.3%;
+}
+@media (max-width:600px) {
+  form .fields {
+    flex-direction: column;
+  }
+  fieldset {
+    width: 100%;
+  }
+}
+input[type="range"],
+input[type="number"],
+input[type="text"] {
+  width: 100%;
+}
+input[type="number"],
+input[type="text"] {
+  border: 0;
+  border-radius: 16px;
+  width: 100%;
+  padding: 0 8px;
+  font-size: 120%;
+  line-height: 40px;
+  color: var(--my-color));
+  background: var(--my-bg-color);
+}
+input[type="number"] {
+  text-align:right;
+}
+legend {
+  font-family: Modak;
+  font-size: 2.2rem;
+  transform: rotate(1deg);
+  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration:underline;
+  text-decoration-thickness:0.1rem;
+  text-decoration-color:var(--my-color);
+}
+
+span.abstain {
+  display: block;
+  font-size:0.9rem;
+  text-align: center;
+  padding: 8px;
+}
+
+dialog {
+  border: 0;
+  border-radius: 12px;
+  box-shadow: 0 0 10px var(--my-shaded-bg);
+  padding: 20px;
+  margin: auto;
+}
+dialog .controls {
+  float: left;
+}
+dialog .button-list {
+  float: right;
+}
+
+.form-status {
+  padding: 10px;
+  border: 1px solid var(--my-border-color);
+  background:var(--my-highlight-bg);
+  border-radius: 5px;
+  margin: 5px;
+  display:inline-block;
+}
+
+.token {
+  padding: 10px;
+  border: 1px solid var(--my-border-color);
+  background:var(--my-highlight-bg);
+  border-radius: 5px;
+  margin: 5px;
+  display:inline-block;
+  text-align: center;
+  vertical-align: top;
 }

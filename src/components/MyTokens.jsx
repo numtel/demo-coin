@@ -1,4 +1,4 @@
-
+import {useState} from 'react';
 import {
   useAccount,
   useReadContracts,
@@ -9,8 +9,10 @@ import { formatEther } from 'viem';
 
 import { chainContracts } from '../contracts.js';
 
+import Flag from './Flag.jsx';
 import TokenForm from './TokenForm.jsx';
 import ClaimBalance from './ClaimBalance.jsx';
+import Dialog from './Dialog.jsx';
 
 export default function MyTokens() {
   const {address: account, chainId} = useAccount();
@@ -108,19 +110,42 @@ function FetchTokens({ list }) {
     Error loading token details!
   </div>);
 
-  console.log(data, list);
+  return list.map((tokenId, index) => (<DisplayToken
+    key={Number(tokenId)}
+    tokenId={tokenId}
+    flag={data[index * 5].result}
+    tokenURI={data[index * 5 + 1].result}
+    mintBallot={data[index * 5 + 2].result}
+    mintPrice={data[index * 5 + 3].result}
+    claimableBalance={data[index * 5 + 4].result}
+    />));
+}
 
-  return list.map((tokenId, index) => (<div key={Number(tokenId)}>
+function DisplayToken({
+  tokenId,
+  flag,
+  tokenURI,
+  mintBallot,
+  mintPrice,
+  claimableBalance,
+}) {
+  const [show, setShow] = useState(false);
+  return (<div className="token">
     <h3>Token #{String(tokenId)}</h3>
-    <p>Minted for {formatEther(data[index * 5 + 3].result)} ETH</p>
-    <p>Claimable balance: {formatEther(data[index * 5 + 4].result)} ETH</p>
-    <ClaimBalance tokenId={tokenId} balance={data[index * 5 + 4].result} />
+    <Flag value={flag} href={tokenURI} />
+    <p>Minted for {formatEther(mintPrice)} ETH</p>
+    <p>Claimable balance: {formatEther(claimableBalance)} ETH</p>
+    <ClaimBalance tokenId={tokenId} balance={claimableBalance} />
+    <button onClick={() => setShow(true)}>Update...</button>
 
-    <TokenForm
-      tokenId={tokenId}
-      initFlag={data[index * 5].result}
-      initTokenURI={data[index * 5 + 1].result}
-      initMintBallot={data[index * 5 + 2].result}
-      />
-  </div>));
+    <Dialog {...{show, setShow}} button="Close">
+      <h2>Update Token #{String(tokenId)}</h2>
+      <TokenForm
+        tokenId={tokenId}
+        initFlag={flag}
+        initTokenURI={tokenURI}
+        initMintBallot={mintBallot}
+        />
+    </Dialog>
+  </div>);
 }

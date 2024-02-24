@@ -68,76 +68,77 @@ export default function TokenForm({
 
   return (
     <form onSubmit={submitForm}>
-      <p className="help">
-        Each token can be configured by the owner at any time.
-      </p>
-      <fieldset>
-        <legend>Mint Ballot</legend>
-        <p className="help">
-          Optionally, submit a ballot for the price to mint another token.
-        </p>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          step="0.1"
-          value={mintBallot}
-          onChange={(e) => setMintBallot(Number(e.target.value))}
-          />
-        <input
-          type="number"
-          min="0"
-          max="100"
-          step="0.1"
-          value={mintBallot}
-          onChange={(e) => setMintBallot(Number(e.target.value))}
-          />
-        {mintBallot === 0 && <span className="help">(Abstaining from voting)</span>}
-      </fieldset>
-      <fieldset>
-        <legend>Flag Configuration</legend>
-        <p className="help">
-          Choose your flag design and three colors.
-        </p>
-        <Flag value={flagValue} />
-        <select
-          value={flagShape}
-          onChange={(e) => setFlagShape(Number(e.target.value))}
-          >
-          <option value="0">Vertical Stripes</option>
-          <option value="1">Horizontal Stripes</option>
-          <option value="2">Diagonal Stripes</option>
-          <option value="3">Concentric Circles</option>
-          <option value="4">Conic Slices</option>
-        </select>
-        <input
-          value={flagColor1}
-          onChange={(e) => setFlagColor1(e.target.value)}
-          type="color"
-          />
-        <input
-          value={flagColor2}
-          onChange={(e) => setFlagColor2(e.target.value)}
-          type="color"
-          />
-        <input
-          value={flagColor3}
-          onChange={(e) => setFlagColor3(e.target.value)}
-          type="color"
-          />
-
-      </fieldset>
-      <fieldset>
-        <legend>Token URI</legend>
-        <p className="help">
-          Link to another resource for more information.
-        </p>
-        <input
-          name="tokenURI"
-          value={tokenURI}
-          onChange={(e) => setTokenURI(e.target.value)}
-          />
-      </fieldset>
+      <div className="fields">
+        <fieldset>
+          <legend>Ballot</legend>
+          <p className="help">
+            Optionally, submit a ballot for the price in {contracts.nativeCurrency} to mint another token.
+          </p>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            value={mintBallot}
+            onChange={(e) => setMintBallot(Number(e.target.value))}
+            />
+          <input
+            type="number"
+            min="0"
+            max="100"
+            step="0.1"
+            value={mintBallot}
+            onChange={(e) => setMintBallot(Number(e.target.value))}
+            />
+          {mintBallot === 0 && <span className="abstain">(Abstaining from voting)</span>}
+        </fieldset>
+        <fieldset>
+          <legend>Flag</legend>
+          <p className="help">
+            Choose your flag design and three colors.
+          </p>
+          <Flag value={flagValue} />
+          <select
+            value={flagShape}
+            onChange={(e) => setFlagShape(Number(e.target.value))}
+            >
+            <option value="0">Vertical Stripes</option>
+            <option value="1">Horizontal Stripes</option>
+            <option value="2">Diagonal Stripes</option>
+            <option value="3">Concentric Circles</option>
+            <option value="4">Conic Slices</option>
+          </select><br />
+          <div className="colors">
+            <input
+              value={flagColor1}
+              onChange={(e) => setFlagColor1(e.target.value)}
+              type="color"
+              />
+            <input
+              value={flagColor2}
+              onChange={(e) => setFlagColor2(e.target.value)}
+              type="color"
+              />
+            <input
+              value={flagColor3}
+              onChange={(e) => setFlagColor3(e.target.value)}
+              type="color"
+              />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Token URI</legend>
+          <p className="help">
+            Link to another resource for more information.
+          </p>
+          <input
+            name="tokenURI"
+            type="text"
+            value={tokenURI}
+            onChange={(e) => setTokenURI(e.target.value)}
+            />
+        </fieldset>
+      </div>
       <div className="controls">
         <button type="submit">{tokenId ? 'Update Token' : 'Mint New Token'}</button>
         {writeLoading && <p className="form-status">Waiting for user...</p>}

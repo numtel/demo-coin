@@ -7,7 +7,7 @@ export const byChain = {
     chain: 17000,
     name: 'Holesky',
     explorer: 'https://holesky.etherscan.io/',
-    nativeCurrency: 'hETH',
+    nativeCurrency: 'holeskyETH',
     DemoERC721: {
       address: '0xD1B96D2A696Dc3A76B455F332307137Bbb28BdB7',
       abi: DemoERC721ABI,

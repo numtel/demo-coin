@@ -38,7 +38,7 @@ export default function ClaimBalance({ tokenId, balance }) {
 
   return (
     <div className="controls">
-      <button onClick={submit}>Collect Balance</button>
+      <button disabled={balance===0n} onClick={submit}>Collect Balance</button><br />
       {writeLoading && <p className="form-status">Waiting for user...</p>}
       {writeError && <p className="form-status error">Transaction error!</p>}
       {writeSuccess && (
