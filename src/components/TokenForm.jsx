@@ -5,6 +5,9 @@ import {
   useWriteContract,
   useWaitForTransactionReceipt,
 } from 'wagmi';
+import {
+  useConnectModal,
+} from '@rainbow-me/rainbowkit';
 
 import { chainContracts } from '../contracts.js';
 
@@ -12,9 +15,10 @@ import Flag from './Flag.jsx';
 
 export default function TokenForm({
   initMintBallot, initFlag, initTokenURI, tokenId,
-  mintPrice,
+  mintPrice, setShow,
 }) {
   const {address: account, chainId} = useAccount();
+  const { openConnectModal } = useConnectModal();
   const contracts = chainContracts(chainId);
   const {
     writeContract,
@@ -30,6 +34,10 @@ export default function TokenForm({
     status: txStatus,
   } = useWaitForTransactionReceipt({
     hash: writeData,
+    onSuccess: function() {
+      // TODO close dialog and refresh mytokens
+      console.log('doooon');
+    },
   });
 
   let shape, color1, color2, color3;
@@ -50,6 +58,11 @@ export default function TokenForm({
 
   function submitForm(event) {
     event.preventDefault();
+    if(!account) {
+      setShow && setShow(false);
+      openConnectModal();
+      return;
+    }
     if(tokenId) {
       writeContract({
         ...contracts.DemoERC721,

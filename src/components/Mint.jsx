@@ -42,13 +42,13 @@ export default function Mint() {
     <p className="price">
       {insufficientBalance && <span className="help">Insufficient Balance!</span>}
     </p>
-    <button onClick={() => setShow(show + 1)}>Configure and Mint Token...</button>
+    <button onClick={() => setShow(show + 1)} className="leader">Mint One Now!</button>
     <Dialog {...{show, setShow}} button="Close">
       <h2>Mint New Token for {formatEther(data[0].result)} {contracts.nativeCurrency}</h2>
       <p className="help">
-        Tokens can be configured by the owner at any time.
+        Tokens can be reconfigured by their owner at any time.
       </p>
-      <TokenForm mintPrice={data[0].result} />
+      <TokenForm mintPrice={data[0].result} {...{setShow}} />
     </Dialog>
   </>);
 }

@@ -134,7 +134,7 @@ function DisplayToken({
     <h3>Token #{String(tokenId)}</h3>
     <Flag value={flag} href={tokenURI} />
     <p>Minted for {formatEther(mintPrice)} ETH</p>
-    <p>Claimable balance: {formatEther(claimableBalance)} ETH</p>
+    <p>Claimable balance: {parseFloat(formatEther(claimableBalance)).toFixed(4)} ETH</p>
     <ClaimBalance tokenId={tokenId} balance={claimableBalance} />
     <button onClick={() => setShow(show + 1)}>Update...</button>
 

@@ -1,11 +1,20 @@
 import { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import {
+  useAccount,
+} from 'wagmi';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faGithub, faEthereum } from '@fortawesome/free-brands-svg-icons';
 
+import { chainContracts } from './contracts.js';
 import DarkModeDetector from './components/DarkModeDetector.jsx';
 import Mint from './components/Mint.jsx';
 import MyTokens from './components/MyTokens.jsx';
 
 export default function App() {
+  const {address: account, chainId} = useAccount();
+  const contracts = chainContracts(chainId);
   return (
     <main>
       <h1>Optimeme<br />Factory</h1>
@@ -21,9 +30,19 @@ export default function App() {
       <p>As an initial demonstration of this new type of decision-making protocol, this project has a single criteria under continous election: the price to mint another NFT.</p>
       <p>All mint fees are redistributed equally among the tokens. Get in early to earn the most!</p>
       <Mint />
-      <h2>My Tokens</h2>
-      <MyTokens />
+      {account && <>
+        <h2 style={{transform:'rotate(2deg)'}}>My Tokens</h2>
+        <MyTokens />
+      </>}
 
+      <footer>
+        <a href="https://github.com/numtel/democoin" rel="noopener" target="_blank" title="Github Repository">
+          <FontAwesomeIcon icon={faGithub} size="2xl" />
+        </a>&nbsp;
+        <a href={contracts.explorer + 'address/' + contracts.DemoERC721.address} rel="noopener" target="_blank" title="Collection on Block Explorer">
+          <FontAwesomeIcon icon={faEthereum} size="2xl" />
+        </a>
+      </footer>
     </main>
   );
 }

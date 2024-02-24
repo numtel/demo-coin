@@ -4,12 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "todo": "bash -c \"grep -rn 'TODO' --exclude-dir={node_modules,build,cache,lib,out} --exclude={*.min*,*.swp,package.json,solc} *\"",
     "dev": "vite",
     "build": "vite build",
     "deploy:sepolia": "forge script script/DemoERC721.s.sol:Deploy --rpc-url https://rpc.ankr.com/eth_sepolia --broadcast --verify -vvvv",
     "deploy:holesky": "forge script script/DemoERC721.s.sol:Deploy --rpc-url https://rpc.ankr.com/eth_holesky --broadcast --verify -vvvv"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@rainbow-me/rainbowkit": "^2.0.1",
     "@tanstack/react-query": "^5.22.2",
     "react": "^18.2.0",

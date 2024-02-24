@@ -1,5 +1,5 @@
-# Democoin
+# Optimeme Factory V2
 
-Demonstration of democracy without discrete elections in an ERC20 token's supply. Each participant receives an equal amount determined by the median of each participant's ballot value.
+Demonstration of democracy without discrete elections in an ERC721 token's mint price determined by the median value of each ballot. Mint fees are distributed equally among all existing tokens. Use flags and your tokenURI to bring support for your price strategy.
 
 
