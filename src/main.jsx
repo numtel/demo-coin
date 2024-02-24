@@ -6,6 +6,7 @@ import {
   getDefaultConfig,
   RainbowKitProvider,
   darkTheme,
+  lightTheme,
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
@@ -29,12 +30,16 @@ const config = getDefaultConfig({
 });
 
 const queryClient = new QueryClient();
+const accentColor = '#c22b66';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <DarkModeDetector dark={{ theme: darkTheme() }}>
+        <DarkModeDetector
+          dark={{ theme: darkTheme({ accentColor }) }}
+          light={{ theme: lightTheme({ accentColor }) }}
+        >
           <RainbowKitProvider>
             <App />
           </RainbowKitProvider>
