@@ -11,6 +11,7 @@ import { chainContracts } from './contracts.js';
 import DarkModeDetector from './components/DarkModeDetector.jsx';
 import Mint from './components/Mint.jsx';
 import MyTokens from './components/MyTokens.jsx';
+import PriceHistory from './components/PriceHistory.jsx';
 
 export default function App() {
   const {address: account, chainId} = useAccount();
@@ -30,6 +31,7 @@ export default function App() {
       <p>As an initial demonstration of this new type of decision-making protocol, this project has a single criteria under continous election: the price to mint another NFT.</p>
       <p>All mint fees are redistributed equally among the tokens. Get in early to earn the most!</p>
       <Mint />
+      <PriceHistory />
       {account && <>
         <h2 style={{transform:'rotate(2deg)'}}>My Tokens</h2>
         <MyTokens />

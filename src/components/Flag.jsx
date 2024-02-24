@@ -1,5 +1,5 @@
 
-export default function Flag({ value, href }) {
+export default function Flag({ value, href, className, tokenId }) {
   const shape = Number(value & 0xFFn);
   const color1 = ((value >> 8n) & 0xFFFFFFn).toString(16).padStart(6, '0');
   const color2 = ((value >> 32n) & 0xFFFFFFn).toString(16).padStart(6, '0');
@@ -35,14 +35,15 @@ export default function Flag({ value, href }) {
     background = `black`;
   }
 
-  if(href) return (<a href={href} rel="noopener" target="_blank"><div
-    className="flag"
+  if(href) return (<a href={href} rel="noopener" target="_blank" title={tokenId ? `Token #${String(tokenId)}` : null}><div
+    className={`flag ${className}`}
     style={{
       background
     }}
   /></a>);
   return (<div
-    className="flag"
+    className={`flag ${className}`}
+    title={tokenId ? `Token #${String(tokenId)}` : null}
     style={{
       background
     }}
