@@ -115,11 +115,27 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
     uint256 amount,
     address payable recipient
   ) external {
+    if(ownerOf(tokenId) != msg.sender)
+      revert ONLY_TOKEN_OWNER();
     if(claimableBalance(tokenId, untilTokenId) < amount)
       revert INSUFFICIENT_BALANCE();
 
     balanceClaimed[tokenId] += amount;
     recipient.transfer(amount);
+  }
+
+  function claimBalanceMany(
+    uint256[] memory tokenId,
+    uint256 untilTokenId,
+    address payable recipient
+  ) external {
+    for(uint256 i = 0; i < tokenId.length; i++) {
+      if(ownerOf(tokenId[i]) != msg.sender)
+        revert ONLY_TOKEN_OWNER();
+      uint256 amount = claimableBalance(tokenId[i], untilTokenId);
+      balanceClaimed[tokenId[i]] += amount;
+      recipient.transfer(amount);
+    }
   }
 
   function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {

@@ -72,10 +72,26 @@ contract DemoERC721Test is Test {
     vm.expectRevert(INSUFFICIENT_BALANCE.selector);
     collection.claimBalance(1, type(uint256).max, 3 ether, payable(address(this)));
 
+    vm.prank(address(1));
+    vm.expectRevert(ONLY_TOKEN_OWNER.selector);
+    collection.claimBalance(1, type(uint256).max, 2 ether, payable(address(1)));
+
     // TODO test claiming until less than max tokenId
     uint256 balanceBefore = address(this).balance;
     collection.claimBalance(1, type(uint256).max, 2 ether, payable(address(this)));
     assertEq(address(this).balance - balanceBefore, 2 ether);
+
+    uint256[] memory tokenIds = new uint256[](3);
+    tokenIds[0] = 2;
+    tokenIds[1] = 3;
+    tokenIds[2] = 4;
+
+    vm.prank(address(1));
+    vm.expectRevert(ONLY_TOKEN_OWNER.selector);
+    collection.claimBalanceMany(tokenIds, type(uint256).max, payable(address(1)));
+
+    collection.claimBalanceMany(tokenIds, type(uint256).max, payable(address(this)));
+    assertEq(address(this).balance - balanceBefore, 4.666666666666666666 ether);
   }
 
   function testGas() public {
