@@ -141,3 +141,9 @@ main>p>a {
   text-decoration:underline;
 }
 
+.flag {
+  display: inline-block;
+  width: 100px;
+  height: 60px;
+  border-radius:5px;
+}

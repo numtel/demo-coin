@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import DarkModeDetector from './components/DarkModeDetector.jsx';
+import Mint from './components/Mint.jsx';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
       <p>Continuous election complements traditional discrete elections by providing a sliding scale for deciding along an individual criteria.</p>
 
       <p>As an initial demonstration of this new type of decision-making protocol, this project has a single criteria under continous election: the price to mint another NFT.</p>
+      <Mint />
 
     </main>
   );
