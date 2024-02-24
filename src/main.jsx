@@ -30,15 +30,18 @@ const config = getDefaultConfig({
 });
 
 const queryClient = new QueryClient();
-const accentColor = '#c22b66';
+const themeConfig = {
+  accentColor: '#c22b66',
+  fontStack: 'Comic Mono',
+};
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <DarkModeDetector
-          dark={{ theme: darkTheme({ accentColor }) }}
-          light={{ theme: lightTheme({ accentColor }) }}
+          dark={{ theme: darkTheme(themeConfig) }}
+          light={{ theme: lightTheme(themeConfig) }}
         >
           <RainbowKitProvider>
             <App />

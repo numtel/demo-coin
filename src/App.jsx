@@ -19,6 +19,7 @@ export default function App() {
       <p>Continuous election complements traditional discrete elections by providing a sliding scale for deciding along an individual criteria.</p>
 
       <p>As an initial demonstration of this new type of decision-making protocol, this project has a single criteria under continous election: the price to mint another NFT.</p>
+      <p>All mint fees are redistributed equally among the tokens. Get in early to earn the most!</p>
       <Mint />
       <h2>My Tokens</h2>
       <MyTokens />

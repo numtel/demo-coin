@@ -1,13 +1,26 @@
-import {useRef, useEffect} from 'react';
+import {useRef, useEffect, useState} from 'react';
 
 export default function Dialog({ show, setShow, children, button }) {
+  const [className, setClassName] = useState('');
   const elRef = useRef();
   useEffect(() => {
-    if(show && !elRef.current.open) elRef.current.showModal();
-    else if(!show) elRef.current.close();
+    if(show && !elRef.current.open) {
+      setClassName('');
+      elRef.current.showModal();
+      setTimeout(() => {
+        setClassName('fade-open');
+      }, 0);
+    } else if(!show) elRef.current.close();
   }, [show]);
-  return (<dialog ref={elRef}>
+  function close() {
+    setClassName('');
+    setTimeout(() => {
+      setShow(0);
+      elRef.current.close();
+    }, 100);
+  }
+  return (<dialog ref={elRef} className={className} onClose={close}>
     {children}
-    {button && <div className="button-list"><button type="button" onClick={() => { setShow(0); elRef.current.close(); }}>{button}</button></div>}
+    {button && <div className="button-list"><button type="button" onClick={close}>{button}</button></div>}
   </dialog>);
 }
