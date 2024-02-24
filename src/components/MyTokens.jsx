@@ -129,14 +129,14 @@ function DisplayToken({
   mintPrice,
   claimableBalance,
 }) {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(0);
   return (<div className="token">
     <h3>Token #{String(tokenId)}</h3>
     <Flag value={flag} href={tokenURI} />
     <p>Minted for {formatEther(mintPrice)} ETH</p>
     <p>Claimable balance: {formatEther(claimableBalance)} ETH</p>
     <ClaimBalance tokenId={tokenId} balance={claimableBalance} />
-    <button onClick={() => setShow(true)}>Update...</button>
+    <button onClick={() => setShow(show + 1)}>Update...</button>
 
     <Dialog {...{show, setShow}} button="Close">
       <h2>Update Token #{String(tokenId)}</h2>

@@ -8,6 +8,6 @@ export default function Dialog({ show, setShow, children, button }) {
   }, [show]);
   return (<dialog ref={elRef}>
     {children}
-    {button && <div className="button-list"><button type="button" onClick={() => { setShow(false); elRef.current.close(); }}>{button}</button></div>}
+    {button && <div className="button-list"><button type="button" onClick={() => { setShow(0); elRef.current.close(); }}>{button}</button></div>}
   </dialog>);
 }

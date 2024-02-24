@@ -23,7 +23,7 @@ export default function Mint() {
       },
     ],
   });
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(0);
 
   if(isLoading) return (<div className="loading">
     Loading...
@@ -42,7 +42,7 @@ export default function Mint() {
     <p className="price">
       {insufficientBalance && <span className="help">Insufficient Balance!</span>}
     </p>
-    <button onClick={() => setShow(true)}>Configure and Mint Token...</button>
+    <button onClick={() => setShow(show + 1)}>Configure and Mint Token...</button>
     <Dialog {...{show, setShow}} button="Close">
       <h2>Mint New Token for {formatEther(data[0].result)} {contracts.nativeCurrency}</h2>
       <p className="help">
