@@ -111,6 +111,7 @@ export default function PriceHistory() {
                 const loaded = changerDetails[String(tokenId)];
                 if(!loaded) return null;
                 return (<Flag
+                  key={String(tokenId)}
                   className="small"
                   value={loaded.flag}
                   href={loaded.tokenURI}
