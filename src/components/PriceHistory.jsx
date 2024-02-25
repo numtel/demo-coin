@@ -4,6 +4,7 @@ import {
   usePublicClient,
 } from 'wagmi';
 import { parseAbiItem } from 'viem';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,7 +12,36 @@ import { chainContracts } from '../contracts.js';
 
 import Flag from './Flag.jsx';
 
-// TODO draw a price graph showing all the updates
+function CustomizedLabel({ x, y, index, value, events, changerDetails }) {
+  return (
+    <g>
+      <foreignObject className="node" data-x={index} x={x} y={y} width="30" height="20">
+        {events[index].changers.map(tokenId => {
+          const loaded = changerDetails[String(tokenId)];
+          if(!loaded) return null;
+          return (<Flag
+            key={String(tokenId)}
+            className="small"
+            value={loaded.flag}
+            href={loaded.tokenURI}
+            tokenId={tokenId}
+            />);
+          })}
+      </foreignObject>
+    </g>
+  );
+}
+
+function CustomizedAxisTick({ x, y, payload }) {
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
+        {(new Date(payload.value * 1000)).toLocaleTimeString()}
+      </text>
+    </g>
+  );
+}
+
 export default function PriceHistory() {
   const {address: account, chainId} = useAccount();
   const contracts = chainContracts(chainId);
@@ -69,7 +99,6 @@ export default function PriceHistory() {
       for(let i = 0; i<events.length; i++) {
         events[i].timestamp = Number(blockDetails[i].timestamp);
       }
-      events.reverse();
       setEvents(events);
       setChangerDetails(await loadFlags(publicClient, contracts, allChangers));
       setIsLoading(false);
@@ -86,44 +115,27 @@ export default function PriceHistory() {
   </div>);
 
   if(events) return(<div className="price-history">
-    <table>
-      <thead>
-        <tr>
-          <th>Time</th>
-          <th>Mint Price</th>
-          <th>Ballots Changed</th>
-        </tr>
-      </thead>
-      <tbody>
-        {events.map((event, index) => (
-          <tr key={index}>
-            <td>
-              {(new Date(event.timestamp * 1000)).toLocaleString()}
-            </td>
-            <td>
-              {event.median / 10}&nbsp;{contracts.nativeCurrency}&nbsp;
-              {index < events.length - 1 && event.median > events[index+1].median &&
-                <FontAwesomeIcon icon={faCaretUp} />}
-              {index < events.length - 1 && event.median < events[index+1].median &&
-                <FontAwesomeIcon icon={faCaretDown} />}
-            </td>
-            <td>
-              {event.changers.map(tokenId => {
-                const loaded = changerDetails[String(tokenId)];
-                if(!loaded) return null;
-                return (<Flag
-                  key={String(tokenId)}
-                  className="small"
-                  value={loaded.flag}
-                  href={loaded.tokenURI}
-                  tokenId={tokenId}
-                  />);
-              })}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <LineChart
+      width={500}
+      height={300}
+      data={events.map(event => ({
+        timestamp: Number(event.timestamp),
+        ETH: event.median / 10,
+      }))}
+      margin={{
+        top: 20,
+        right: 30,
+        left: 20,
+        bottom: 100,
+      }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="timestamp" type="number" domain={['dataMin', 'dataMax']} height={10} tick={<CustomizedAxisTick />} />
+      <YAxis />
+      <Tooltip labelStyle={{color:'#333333'}} labelFormatter={(value) => (new Date(value * 1000)).toLocaleString()} />
+      <Legend />
+      <Line type="monotone" dataKey="ETH" stroke="#8884d8" label={<CustomizedLabel {...{events, changerDetails}} />} />
+    </LineChart>
   </div>);
 }
 

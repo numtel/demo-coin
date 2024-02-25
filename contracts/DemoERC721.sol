@@ -47,6 +47,7 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
     setTokenURI(mintCount, _tokenURI);
   }
 
+  // TODO should this be a median of recent history? twap?
   function currentMintPrice() public view returns(uint256) {
     // First time is free
     if(mintCount == 0) return 0;

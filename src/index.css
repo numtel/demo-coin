@@ -207,6 +207,9 @@ main>p>a {
   animation: none;
   box-shadow: inset 0 0 1px var(--my-color);
 }
+foreignObject .flag {
+  margin: 0;
+}
 
 @keyframes lightBreezeAnimation {
   25% {
@@ -366,4 +369,11 @@ table {
 td, th {
   padding: 4px;
   border: 1px solid var(--my-border-color);
+}
+
+.recharts-wrapper {
+  margin: 0 auto;
+}
+.recharts-wrapper svg {
+  overflow:visible;
 }
