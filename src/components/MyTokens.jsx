@@ -145,6 +145,7 @@ function DisplayToken({
     <h3>Token #{String(tokenId)}</h3>
     <div className="stats">
       <p>Minted for {formatEther(mintPrice)} {contracts.nativeCurrency}</p>
+      <p>Mint Ballot: {Number(mintBallot)/10} {contracts.nativeCurrency}</p>
       <p>Claimable balance: {parseFloat(formatEther(claimableBalance)).toFixed(4)} {contracts.nativeCurrency}</p>
     </div>
     <div className="controls">

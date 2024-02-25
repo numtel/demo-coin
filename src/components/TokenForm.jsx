@@ -58,13 +58,14 @@ export default function TokenForm({
   const flagValue = BigInt(`0x${flagColor3.slice(1)}${flagColor2.slice(1)}${flagColor1.slice(1)}0${flagShape}`);
 
   useEffect(() => {
-    if(writeLoading) toast('Waiting for wallet...');
-    if(writeError) toast('Transaction error!');
+    toast.dismiss();
+    if(writeLoading) toast.loading('Waiting for wallet...');
+    if(writeError) toast.error('Transaction error!');
     if(writeSuccess) {
-      if(txError) toast('Transaction error!');
-      else if(txLoading) toast('Waiting for transaction...');
-      else if(txSuccess) toast('Success!');
-      else toast('Transaction sent...');
+      if(txError) toast.error('Transaction error!');
+      else if(txLoading) toast.loading('Waiting for transaction...');
+      else if(txSuccess) toast.success('Success!');
+      else toast.loading('Transaction sent...');
     }
   }, [ txError, txSuccess, txLoading, writeLoading, writeError, writeSuccess ]);
 

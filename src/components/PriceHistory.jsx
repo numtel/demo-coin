@@ -61,7 +61,7 @@ export default function PriceHistory() {
         toBlock: blockNumber,
       });
       const allChangers = [];
-      const events = [];
+      let events = [];
       let ballots = {};
       for(let log of logs) {
         if(log.args.oldValue === log.args.newValue) continue;
@@ -90,10 +90,13 @@ export default function PriceHistory() {
           events.push(event);
         } else {
           events[events.length-1].ballots = {...ballots};
-          events[events.length-1].median = meidan;
+          events[events.length-1].median = median;
           events[events.length-1].changers.push(log.args.tokenId);
         }
       }
+      // Remove ballot changes that didn't result in a median change
+      events = events.filter((e, i) => i === 0 || e.median !== events[i-1].median);
+
       const blockPromises = events.map(event => publicClient.getBlock({blockNumber: event.block}));
       const blockDetails = await Promise.all(blockPromises);
       for(let i = 0; i<events.length; i++) {
@@ -134,7 +137,7 @@ export default function PriceHistory() {
       <YAxis />
       <Tooltip labelStyle={{color:'#333333'}} labelFormatter={(value) => (new Date(value * 1000)).toLocaleString()} />
       <Legend />
-      <Line type="monotone" dataKey="ETH" stroke="#8884d8" label={<CustomizedLabel {...{events, changerDetails}} />} />
+      <Line type="stepAfter" dataKey="ETH" stroke="#8884d8" label={<CustomizedLabel {...{events, changerDetails}} />} />
     </LineChart>
   </div>);
 }
