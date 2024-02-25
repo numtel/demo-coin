@@ -48,7 +48,7 @@ export default function PriceHistory() {
             votes.length === 1 ? votes[0] :
             votes.length % 2 === 1
               ? votes[midIndex]
-              : (votes[midIndex - 1] + votes[midIndex])/2;
+              : Math.floor((votes[midIndex - 1] + votes[midIndex])/2);
         if(!events.length || events[events.length-1].block !== log.blockNumber) {
           const event = {
             block: log.blockNumber,

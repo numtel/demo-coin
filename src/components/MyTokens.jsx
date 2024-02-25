@@ -117,7 +117,7 @@ function FetchTokens({ list }) {
     totalBalance += data[i* 5 + 4].result;
   }
   return (<>
-    <CollectAll tokenIds={list} {...{totalBalance}}/>
+    {list.length > 1 && <CollectAll tokenIds={list} {...{totalBalance}}/>}
     <SlideIn>{list.map((tokenId, index) => (<DisplayToken
       {...{contracts, tokenId}}
       key={Number(tokenId)}

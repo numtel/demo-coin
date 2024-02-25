@@ -199,6 +199,7 @@ main>p>a {
   border-radius:5px;
   box-shadow: inset 0 0 3px var(--my-color);
   animation: lightBreezeAnimation 8s infinite ease-in-out;
+  margin: 4px;
 }
 .flag.small {
   width: 30px;
