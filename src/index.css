@@ -314,6 +314,8 @@ dialog .button-list {
 
 footer {
   margin: 80px 0 50px;
+  display:flex;
+  justify-content: center;
 }
 
 /* FA icons flash huge on page load? */
