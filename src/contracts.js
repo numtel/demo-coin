@@ -8,9 +8,9 @@ export const byChain = {
     name: 'Holesky',
     explorer: 'https://holesky.etherscan.io/',
     nativeCurrency: 'hETH',
-    startBlock: 1009077n,
+    startBlock: 1015177n,
     DemoERC721: {
-      address: '0xcE6dadCC3F3206aBd32F07346f8155A4Ce9477f0',
+      address: '0x10c05Fe61d4CA86a29f9Afe5607Bbde533F04a1e',
       abi: DemoERC721ABI,
       chainId: 17000,
     },

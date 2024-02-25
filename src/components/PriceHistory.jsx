@@ -80,6 +80,10 @@ export default function PriceHistory() {
     Loading price history...
   </div>);
 
+  if(events && events.length === 0) return(<div className="empty">
+    No ballots set.
+  </div>);
+
   if(events) return(<div className="price-history">
     <table>
       <thead>
@@ -90,11 +94,7 @@ export default function PriceHistory() {
         </tr>
       </thead>
       <tbody>
-        {events.length === 0 ? (
-          <tr>
-            <td colspan="3">No ballots yet.</td>
-          </tr>
-        ) : events.map((event, index) => (
+        {events.map((event, index) => (
           <tr key={index}>
             <td>
               {(new Date(event.timestamp * 1000)).toLocaleString()}
