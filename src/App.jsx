@@ -4,7 +4,6 @@ import {
   useAccount,
 } from 'wagmi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faEthereum } from '@fortawesome/free-brands-svg-icons';
 
 import { chainContracts } from './contracts.js';
@@ -38,12 +37,15 @@ export default function App() {
       </>}
 
       <footer>
-        <a href="https://github.com/numtel/democoin" rel="noopener" target="_blank" title="Github Repository">
-          <FontAwesomeIcon icon={faGithub} size="2xl" />
-        </a>&nbsp;
-        <a href={contracts.explorer + 'address/' + contracts.DemoERC721.address} rel="noopener" target="_blank" title="Collection on Block Explorer">
-          <FontAwesomeIcon icon={faEthereum} size="2xl" />
-        </a>
+        <blockquote>Show me what democracy looks like!</blockquote>
+        <div className="icons">
+          <a href="https://github.com/numtel/democoin" rel="noopener" target="_blank" title="Github Repository">
+            <FontAwesomeIcon icon={faGithub} size="2xl" />
+          </a>&nbsp;
+          <a href={contracts.explorer + 'address/' + contracts.DemoERC721.address} rel="noopener" target="_blank" title="Collection on Block Explorer">
+            <FontAwesomeIcon icon={faEthereum} size="2xl" />
+          </a>
+        </div>
       </footer>
     </main>
   );
