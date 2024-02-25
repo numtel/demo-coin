@@ -11,6 +11,7 @@ import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { chainContracts } from '../contracts.js';
 
 import Flag from './Flag.jsx';
+import useWindowWidth from './useWindowWidth.jsx';
 
 function CustomizedLabel({ x, y, index, value, events, changerDetails }) {
   return (
@@ -43,6 +44,7 @@ function CustomizedAxisTick({ x, y, payload }) {
 }
 
 export default function PriceHistory() {
+  const windowWidth = useWindowWidth();
   const {address: account, chainId} = useAccount();
   const contracts = chainContracts(chainId);
   const publicClient = usePublicClient({ chainId });
@@ -119,7 +121,7 @@ export default function PriceHistory() {
 
   if(events) return(<div className="price-history">
     <LineChart
-      width={500}
+      width={Math.min(windowWidth, 960)}
       height={300}
       data={events.map(event => ({
         timestamp: Number(event.timestamp),
@@ -127,7 +129,7 @@ export default function PriceHistory() {
       }))}
       margin={{
         top: 20,
-        right: 30,
+        right: 50,
         left: 20,
         bottom: 100,
       }}
