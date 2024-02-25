@@ -316,9 +316,21 @@ dialog .button-list {
   background:var(--my-highlight-bg);
   border-radius: 5px;
   margin: 5px;
-  display:inline-block;
+  display:flex;
+  flex-direction:row;
   text-align: center;
-  vertical-align: top;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+@media (max-width:550px) {
+  .token {
+    flex-direction:column;
+  }
+  .token .controls {
+    display:flex;
+    flex-direction:row;
+  }
 }
 
 .token:nth-child(2n) .flag { animation-delay: 4s; }

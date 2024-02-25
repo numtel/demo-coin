@@ -3,6 +3,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import {
   useAccount,
 } from 'wagmi';
+import { Toaster } from 'react-hot-toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faEthereum } from '@fortawesome/free-brands-svg-icons';
@@ -19,6 +20,7 @@ export default function App() {
   const contracts = chainContracts(chainId);
   return (
     <main>
+      <Toaster />
       <h1>Optimeme<br />Factory</h1>
       <div className="rainbowkit">
         <ConnectButton />

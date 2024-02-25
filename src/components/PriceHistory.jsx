@@ -34,6 +34,7 @@ export default function PriceHistory() {
       const events = [];
       let ballots = {};
       for(let log of logs) {
+        if(log.args.oldValue === log.args.newValue) continue;
         ballots = {
           ...ballots,
           [String(log.args.tokenId)]: Number(log.args.newValue)
