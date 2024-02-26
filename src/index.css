@@ -56,6 +56,7 @@ body {
 
 
 h1 {
+  user-select: none;
   font-family: Modak;
   font-style:normal;
   font-stretch:normal;
@@ -238,10 +239,11 @@ button.leader {
   color: #222;
   border: 4px outset #888;
   padding: 10px 25px 5px;
-  border-radius: 0;
+  border-radius: 3px;
   font-size: 1.8rem;
   font-family: tahoma;
   position:relative;
+  box-shadow: var(--my-h1-shadow) 0px 0px 15px;
   transition: 1s box-shadow;
   cursor: url('data:image/x-icon;base64,AAACAAEAICACAAAAAAAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAMAAAAGAAAABgAAAAwAAAEMAAABmAAAAdgAAAH4AAAB/wAAAf4AAAH8AAAB+AAAAfAAAAHgAAABwAAAAYAAAAEAAAAAAAAAA/////////////////////////////////////////////////////////////////z////4f///+H////D///3w///84f///GH///wD///8A////AA///wAf//8AP///AH///wD///8B////A////wf///8P////H////z////8='), auto;
 }
@@ -255,6 +257,14 @@ button.leader:hover {
   animation: buttonFail 10s linear forwards;
   transform-origin: center;
   color:#900;
+}
+button.leader:hover::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  bottom: -50px;
+  left: -50px;
+  right: -50px;
 }
 
 @keyframes buttonFail {
@@ -330,9 +340,11 @@ foreignObject .flag {
     transform: rotate(-1deg) translateX(2%) skewX(3deg);
   }
 }
-
-form {
+.token-uri {
+  margin: 30px 0;
+  word-wrap: anywhere;
 }
+
 form .fields {
   display:flex;
   gap: 10px;
@@ -395,6 +407,7 @@ span.abstain {
 }
 
 dialog {
+  user-select: none;
   border: 1px solid var(--my-border-color);
   border-radius: 12px;
   padding: 20px 10px;
@@ -449,6 +462,7 @@ dialog .button-list {
 .token:nth-child(2n) .flag { animation-delay: 4s; }
 
 footer {
+  user-select: none;
   margin: 80px 0 50px;
   display:flex;
   justify-content: center;

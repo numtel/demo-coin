@@ -7,13 +7,28 @@ export default function Dialog({ show, setShow, children, button }) {
   const [className, setClassName] = useState('');
   const elRef = useRef();
   useEffect(() => {
+    const handleOutsideClick = (event) => {
+      const rect = elRef.current.getBoundingClientRect();
+      const isInDialog=(rect.top <= event.clientY && event.clientY <= rect.top + rect.height
+        && rect.left <= event.clientX && event.clientX <= rect.left + rect.width);
+      // Fix for Firefox
+      if(event.target.nodeName === 'OPTION') return;
+      if (!isInDialog) {
+        close();
+      }
+    };
     if(show && !elRef.current.open) {
       setClassName('');
       elRef.current.showModal();
       setTimeout(() => {
         setClassName('fade-open');
       }, 0);
+      document.addEventListener('mousedown', handleOutsideClick);
     } else if(!show) elRef.current.close();
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
   }, [show]);
   function close() {
     setClassName('');

@@ -141,7 +141,7 @@ function DisplayToken({
 }) {
   const [show, setShow] = useState(0);
   return (<div className="token">
-    <Flag value={flag} href={tokenURI} />
+    <Flag value={flag} href={tokenURI} {...{tokenId}} />
     <h3>Token #{String(tokenId)}</h3>
     <div className="stats">
       <p>Minted for {formatEther(mintPrice)} {contracts.nativeCurrency}</p>

@@ -161,7 +161,7 @@ export default function TokenForm({
         <fieldset>
           <legend>Token URI</legend>
           <p className="help">
-            Link to another resource for more information.
+            A link of your choice
           </p>
           <input
             name="tokenURI"

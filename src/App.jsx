@@ -5,7 +5,6 @@ import {
 } from 'wagmi';
 import { Toaster } from 'react-hot-toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faEthereum } from '@fortawesome/free-brands-svg-icons';
 
 import { chainContracts } from './contracts.js';

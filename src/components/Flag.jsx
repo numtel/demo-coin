@@ -1,5 +1,18 @@
+import {useState} from 'react';
+import {
+  useAccount,
+} from 'wagmi';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+
+import { chainContracts } from '../contracts.js';
+import Dialog from './Dialog.jsx';
 
 export default function Flag({ value, href, className, tokenId }) {
+  const [show, setShow] = useState(0);
+  const {address: account, chainId} = useAccount();
+  const contracts = chainContracts(chainId);
+
   const shape = Number(value & 0xFFn);
   const color1 = ((value >> 8n) & 0xFFFFFFn).toString(16).padStart(6, '0');
   const color2 = ((value >> 32n) & 0xFFFFFFn).toString(16).padStart(6, '0');
@@ -35,17 +48,32 @@ export default function Flag({ value, href, className, tokenId }) {
     background = `black`;
   }
 
-  if(href) return (<a href={href} rel="noopener" target="_blank" title={tokenId ? `Token #${String(tokenId)}` : null}><div
-    className={`flag ${className}`}
-    style={{
-      background
-    }}
-  /></a>);
-  return (<div
-    className={`flag ${className}`}
-    title={tokenId ? `Token #${String(tokenId)}` : null}
-    style={{
-      background
-    }}
-  />);
+  return (<>
+    <button
+      type="button"
+      onClick={() => tokenId && setShow(show + 1)}
+      className={`flag ${className}`}
+      title={tokenId ? `Token #${String(tokenId)}` : null}
+      style={{
+        background
+      }}
+    />
+    <Dialog {...{show, setShow}} button="Close">
+      <h2>Token #{String(tokenId)}<br />
+        <a href={contracts.explorer + 'token/' + contracts.DemoERC721.address + '?a=' + String(tokenId)}
+          rel="noopener" target="_blank" title="View on Explorer">
+            <FontAwesomeIcon icon={faUpRightFromSquare} />
+          </a>
+      </h2>
+      <div
+        className={`flag`}
+        title={tokenId ? `Token #${String(tokenId)}` : null}
+        style={{
+          background
+        }}
+      />
+      {href && (<p className="token-uri"><a href={href} title="Owner-Submitted Token URI" rel="noopener" target="_blank">{href}</a></p>)}
+    </Dialog>
+
+  </>);
 }
