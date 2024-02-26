@@ -1,5 +1,8 @@
 import {useRef, useEffect, useState} from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 export default function Dialog({ show, setShow, children, button }) {
   const [className, setClassName] = useState('');
   const elRef = useRef();
@@ -20,7 +23,7 @@ export default function Dialog({ show, setShow, children, button }) {
     }, 100);
   }
   return (<dialog ref={elRef} className={className} onClose={close}>
+    {button && <div className="button-list"><button type="button" title={button} onClick={close}><FontAwesomeIcon icon={faXmark} /></button></div>}
     {children}
-    {button && <div className="button-list"><button type="button" onClick={close}>{button}</button></div>}
   </dialog>);
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
 import {
   useAccount,
 } from 'wagmi';
@@ -17,13 +17,15 @@ import MintBallots from './components/MintBallots.jsx';
 
 export default function App() {
   const {address: account, chainId} = useAccount();
+  const { openConnectModal } = useConnectModal();
   const contracts = chainContracts(chainId);
   return (
     <main>
       <Toaster />
       <h1>Optimeme<br />Factory</h1>
       <div className="rainbowkit">
-        <ConnectButton />
+        {account ? <ConnectButton /> :
+          <button type="button" onClick={openConnectModal}>Connect Wallet</button>}
       </div>
       <blockquote>This is what democracy looks like?</blockquote>
       <p>A new tokenomics, from the token holders<br />

@@ -5,8 +5,6 @@ import {
 } from 'wagmi';
 import { parseAbiItem } from 'viem';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 import { chainContracts } from '../contracts.js';
 

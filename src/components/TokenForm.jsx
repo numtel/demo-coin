@@ -9,6 +9,8 @@ import {
   useConnectModal,
 } from '@rainbow-me/rainbowkit';
 import toast from 'react-hot-toast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { chainContracts } from '../contracts.js';
 
@@ -116,6 +118,10 @@ export default function TokenForm({
             value={mintBallot}
             onChange={(e) => setMintBallot(Number(e.target.value))}
             />
+            <div className="controls">
+              <button type="button" onClick={() => setMintBallot(Number(Math.max(mintBallot - 0.1, 0).toFixed(1)))}><FontAwesomeIcon icon={faMinus} /></button>
+              <button type="button" onClick={() => setMintBallot(Number(Math.min(mintBallot + 0.1, 100).toFixed(1)))}><FontAwesomeIcon icon={faPlus} /></button>
+            </div>
           {mintBallot === 0 && <span className="abstain">(Abstaining from voting)</span>}
         </fieldset>
         <fieldset>

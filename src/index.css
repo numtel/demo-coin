@@ -183,16 +183,16 @@ h2 .value {
     transform: rotate(4deg);
   }
   33% {
-    transform: rotate(18deg);
-  }
-  39% {
-    transform: rotate(18deg);
-  }
-  44% {
     transform: rotate(10deg);
   }
+  39% {
+    transform: rotate(10deg);
+  }
+  44% {
+    transform: rotate(6deg);
+  }
   49% {
-    transform: rotate(16deg);
+    transform: rotate(8deg);
   }
   60% {
     transform: rotate(4deg);
@@ -252,7 +252,7 @@ button.leader:active {
   top:8px;
 }
 button.leader:hover {
-  animation: buttonFail 10s infinite ease-in-out;
+  animation: buttonFail 10s linear forwards;
   transform-origin: center;
   color:#900;
 }
@@ -273,22 +273,18 @@ button.leader:hover {
     left: 0;
   }
   74% {
-    transform: rotate(-10deg);
+    transform: rotate(-10deg) scale(1.2);
     color:#fff;
     box-shadow: var(--my-shadow) 0 0 40px;
     margin-top:-15px;
     margin-bottom: 25px;
   }
-  79% {
-    transform: rotate(16deg);
-    color:#900;
-    box-shadow: var(--my-shadow) 0 0 0;
-    margin-top:5px;
-    margin-bottom: 5px;
-    left: 0;
-  }
-  90% {
-    transform: rotate(4deg);
+  100% {
+    transform: rotate(-10deg) scale(1.2);
+    color:#fff;
+    box-shadow: var(--my-shadow) 0 0 40px;
+    margin-top:-15px;
+    margin-bottom: 25px;
   }
 }
 
@@ -413,9 +409,6 @@ dialog.fade-open {
   opacity: 1;
   transform: translateY(0);
   box-shadow: var(--my-h1-shadow) 0px 0px 150px;
-}
-dialog .controls {
-  float: left;
 }
 dialog .button-list {
   float: right;

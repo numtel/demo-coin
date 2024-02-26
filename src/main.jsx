@@ -43,7 +43,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           dark={{ theme: darkTheme(themeConfig) }}
           light={{ theme: lightTheme(themeConfig) }}
         >
-          <RainbowKitProvider>
+          <RainbowKitProvider modalSize="compact">
             <App />
           </RainbowKitProvider>
         </DarkModeDetector>
