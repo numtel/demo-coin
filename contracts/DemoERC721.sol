@@ -5,7 +5,11 @@ import "openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerabl
 import "openzeppelin-contracts/contracts/interfaces/IERC4906.sol";
 import "openzeppelin-contracts/contracts/interfaces/IERC165.sol";
 
+import "./libraries/Median.sol";
+
 contract DemoERC721 is ERC721Enumerable, IERC4906 {
+  using Median for Median.Data;
+
   error INSUFFICIENT_BALANCE();
   error INSUFFICIENT_VALUE_SENT();
   error INVALID_VALUE();
@@ -14,11 +18,8 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
   event MintBallotUpdate(uint256 indexed tokenId, uint256 oldValue, uint256 newValue);
   event FlagUpdate(uint256 indexed tokenId);
 
-  mapping(uint256 => uint256) public mintBallots;
-  mapping(uint256 => uint256) public medianBuckets;
-  uint256 public constant bucketCount = 1001; // i.e. max 100 ether
+  Median.Data _mintBallots;
   uint256 public constant bucketIncrement = 0.1 ether;
-  uint256 public ballotCount;
 
   uint256 public mintCount;
   mapping(uint256 => uint256) public mintPrices;
@@ -27,7 +28,9 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
   mapping(uint256 => string) _tokenURIs;
   mapping(uint256 => uint256) public flags;
 
-  constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
+  constructor(string memory name, string memory symbol) ERC721(name, symbol) {
+    _mintBallots.bucketCount = 1001; // max 100 eth with 0.1 bucketIncrement
+  }
 
   function supportsInterface(
     bytes4 interfaceId
@@ -49,49 +52,20 @@ contract DemoERC721 is ERC721Enumerable, IERC4906 {
 
   // TODO should this be a median of recent history? twap?
   function currentMintPrice() public view returns(uint256) {
-    // First time is free
-    if(mintCount == 0) return 0;
+    return _mintBallots.calculate() * bucketIncrement;
+  }
 
-    uint256 medianPos = ballotCount / 2;
-    bool countIsEven = ballotCount % 2 == 0;
-    uint256 soFar;
-    uint256 curBucket;
-    uint256 otherBucket;
-    while(soFar <= medianPos) {
-      soFar += medianBuckets[curBucket];
-      curBucket++;
-      if(countIsEven && soFar == medianPos && otherBucket == 0) {
-        // Median is between 2 buckets
-        otherBucket = curBucket;
-      }
-    }
-    if(otherBucket > 0) {
-      curBucket = (otherBucket + curBucket) / 2;
-    }
-    return curBucket * bucketIncrement;
+  function mintBallots(uint256 tokenId) public view returns(uint256) {
+    return _mintBallots.ballots[tokenId];
   }
 
   function setMintBallot(uint256 tokenId, uint256 value) public {
     if(ownerOf(tokenId) != msg.sender)
       revert ONLY_TOKEN_OWNER();
-    if(value > bucketCount)
-      revert INVALID_VALUE();
 
-    emit MintBallotUpdate(tokenId, mintBallots[tokenId], value);
+    emit MintBallotUpdate(tokenId, _mintBallots.ballots[tokenId], value);
 
-    if(mintBallots[tokenId] > 0) {
-      // Updating an existing value
-      medianBuckets[mintBallots[tokenId] - 1]--;
-      mintBallots[tokenId] = 0;
-      ballotCount--;
-    }
-
-    if(value > 0) {
-      // Not clearing a token's vote
-      medianBuckets[value - 1]++;
-      mintBallots[tokenId] = value;
-      ballotCount++;
-    }
+    _mintBallots.set(tokenId, value);
   }
 
   function setMintBallotMany(uint256[] memory tokenId, uint256 value) external {
